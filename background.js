@@ -58,8 +58,9 @@ async function translateTextToAfaanOromo(text) {
  *
  * @param {string} originalText - The user's selected text
  * @param {string} translatedText - The Afaan Oromo translation
+ * @param {string} [iconUrl] - Absolute URL to the extension logo icon
  */
-function showFloatingTranslationCard(originalText, translatedText) {
+function showFloatingTranslationCard(originalText, translatedText, iconUrl) {
   // Remove any previous translation card if one is already open
   const existingCard = document.getElementById("ao-translator-floating-card");
   if (existingCard) {
@@ -110,7 +111,7 @@ function showFloatingTranslationCard(originalText, translatedText) {
   card.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:linear-gradient(135deg,#2563eb,#059669);color:#ffffff;">
       <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;">
-        <span style="background:rgba(255,255,255,0.25);padding:2px 6px;border-radius:4px;font-size:11px;">AO</span>
+        ${iconUrl ? `<img src="${iconUrl}" style="width:22px;height:22px;border-radius:4px;object-fit:contain;background:#ffffff;box-shadow:0 1px 3px rgba(0,0,0,0.15);" alt="Logo" />` : `<span style="background:rgba(255,255,255,0.25);padding:2px 6px;border-radius:4px;font-size:11px;">AO</span>`}
         <span>Afaan Oromo (Hiikaa)</span>
       </div>
       <button id="ao-close-btn" style="background:none;border:none;color:#ffffff;font-size:18px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:4px;" title="Close">✕</button>
@@ -175,10 +176,11 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       const translated = await translateTextToAfaanOromo(rawSelectedText);
 
       // 2. Inject the floating card into the webpage tab
+      const iconUrl = chrome.runtime.getURL("icon.png");
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: showFloatingTranslationCard,
-        args: [rawSelectedText, translated]
+        args: [rawSelectedText, translated, iconUrl]
       });
     } catch (error) {
       console.error("Context menu translation error:", error);

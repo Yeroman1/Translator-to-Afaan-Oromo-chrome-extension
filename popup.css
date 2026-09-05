@@ -93,6 +93,16 @@ body {
   flex-shrink: 0;
 }
 
+.logo-badge-img {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+  box-shadow: 0 4px 10px var(--primary-glow);
+  flex-shrink: 0;
+  background-color: #ffffff;
+}
+
 .title-group {
   display: flex;
   flex-direction: column;
