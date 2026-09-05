@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Afaan Oromo Web Translator</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="extension-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-badge">AO</div>
+      <div class="title-group">
+        <h1 class="main-title">Afaan Oromo Web Translator</h1>
+        <p class="subtitle">Level 3: Full Page & Selection Translator</p>
+      </div>
+    </header>
+
+    <!-- Extraction Action Group -->
+    <section class="action-section">
+      <div class="button-group">
+        <button id="extractSelectedBtn" class="primary-button selection-btn" type="button" title="Extract only the text currently highlighted on the webpage">
+          <span class="btn-icon">✨</span>
+          <span class="btn-text">Extract Selected Text</span>
+        </button>
+        <button id="extractFullBtn" class="secondary-button fullpage-btn" type="button" title="Extract all readable text from the webpage body">
+          <span class="btn-icon">📄</span>
+          <span class="btn-text">Extract Full Page</span>
+        </button>
+      </div>
+
+      <div class="status-card">
+        <span class="status-label">Status:</span>
+        <span id="statusIndicator" class="status-badge status-ready">Ready</span>
+      </div>
+    </section>
+
+    <!-- Source / Extracted Content Panel -->
+    <section class="panel-section">
+      <div class="panel-header">
+        <label for="extractedText" class="section-label">Source Text (English / Webpage):</label>
+        <span id="srcCharCount" class="counter-badge" title="Source character count">0 chars</span>
+      </div>
+      <div class="textarea-wrapper">
+        <textarea
+          id="extractedText"
+          class="content-textarea"
+          placeholder="Highlight text on the webpage and click 'Extract Selected Text', or extract the full page..."
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- Translation Trigger -->
+    <section class="translate-action-section">
+      <button id="translateBtn" class="translate-button" type="button">
+        <span class="btn-icon">🌐</span>
+        <span class="btn-text">Translate to Afaan Oromo</span>
+      </button>
+    </section>
+
+    <!-- Afaan Oromo Translation Panel -->
+    <section class="panel-section">
+      <div class="panel-header">
+        <label for="translatedText" class="section-label">Afaan Oromo (Hiikaa):</label>
+        <span id="targetCharCount" class="counter-badge" title="Translated character count">0 chars</span>
+      </div>
+      <div class="textarea-wrapper">
+        <textarea
+          id="translatedText"
+          class="content-textarea translated-textarea"
+          placeholder="Afaan Oromo translation will appear here..."
+          readonly
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- Action Bar & Footer -->
+    <footer class="footer-actions">
+      <button id="copyBtn" class="secondary-button" type="button" title="Copy translated text to clipboard">
+        <span class="btn-icon">📋</span>
+        <span class="btn-text">Copy Translation</span>
+      </button>
+      <button id="clearBtn" class="secondary-button danger-hover" type="button" title="Clear all text">
+        <span class="btn-icon">🗑️</span>
+        <span class="btn-text">Clear All</span>
+      </button>
+    </footer>
+
+    <!-- Author & Issue Link -->
+    <div class="footer-credit">
+      <span>Made with ♥ by <a href="https://github.com/Yeroman1" target="_blank" rel="noreferrer">@Yeroman1</a></span>
+      <span class="dot-separator">•</span>
+      <a href="https://github.com/Yeroman1/Translator-to-Afaan-Oromo-chrome-extension/issues/new/choose" target="_blank" rel="noreferrer">Report Bug</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

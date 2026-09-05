@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Afaan Oromo Web Translator",
+  "version": "3.0.0",
+  "description": "Extract and translate entire pages or selected text into Afaan Oromo.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "https://translate.googleapis.com/*",
+    "https://api.mymemory.translated.net/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
