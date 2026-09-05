@@ -24,29 +24,62 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 // ============================================================================
-// 2. Translation Service for Service Worker
+// 2. Translation Service for Service Worker (Multi-Provider Engine)
 // ============================================================================
 async function translateTextToAfaanOromo(text) {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=om&dt=t&q=${encodeURIComponent(text)}`;
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  const data = await response.json();
-  if (!data || !data[0] || !Array.isArray(data[0])) {
-    throw new Error("Unexpected translation response.");
-  }
-
-  let translated = "";
-  for (const part of data[0]) {
-    if (part && part[0]) {
-      translated += part[0];
+  // Provider 1: Google Translate single-shot endpoint
+  try {
+    const googleUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=om&dt=t&q=${encodeURIComponent(text)}`;
+    const response = await fetch(googleUrl);
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data[0] && Array.isArray(data[0])) {
+        let translated = "";
+        for (const part of data[0]) {
+          if (part && part[0]) {
+            translated += part[0];
+          }
+        }
+        if (translated.trim()) {
+          return translated;
+        }
+      }
     }
+  } catch (err) {
+    console.warn("Google translate attempt failed, trying MyMemory fallback...", err);
   }
-  return translated;
+
+  // Provider 2: MyMemory Translation API fallback
+  try {
+    const myMemoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=auto|om`;
+    const response = await fetch(myMemoryUrl);
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.responseData && data.responseData.translatedText) {
+        return data.responseData.translatedText;
+      }
+    }
+  } catch (err) {
+    console.warn("MyMemory translate attempt failed...", err);
+  }
+
+  throw new Error("Unable to reach translation servers. Please verify your internet connection.");
 }
+
+// Listen for translation requests sent from popup.js
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "translate" && request.text) {
+    translateTextToAfaanOromo(request.text)
+      .then((translated) => {
+        sendResponse({ success: true, result: translated });
+      })
+      .catch((error) => {
+        sendResponse({ success: false, error: error.message });
+      });
+    // Return true to indicate asynchronous sendResponse
+    return true;
+  }
+});
 
 // ============================================================================
 // 3. In-Page Floating Translation Card (Injected into Webpage DOM)

@@ -242,9 +242,35 @@ function splitTextIntoChunks(text, maxChunkSize = 700) {
 // 6. Translation Engine
 // ============================================================================
 
+/**
+ * Translates a text chunk by delegating the network request to the
+ * background service worker. This avoids popup CORS/Origin header restrictions.
+ */
 async function translateChunkToAfaanOromo(textChunk) {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=om&dt=t&q=${encodeURIComponent(textChunk)}`;
+  // Primary Strategy: Route through background service worker
+  try {
+    const response = await new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        { action: "translate", text: textChunk },
+        (res) => {
+          if (chrome.runtime.lastError) {
+            return reject(new Error(chrome.runtime.lastError.message));
+          }
+          if (res && res.success) {
+            resolve(res.result);
+          } else {
+            reject(new Error(res ? res.error : "Translation failed"));
+          }
+        }
+      );
+    });
+    return response;
+  } catch (msgError) {
+    console.warn("Background messaging failed, trying direct fetch fallback...", msgError);
+  }
 
+  // Fallback Strategy: Direct fetch if background worker is unavailable
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=om&dt=t&q=${encodeURIComponent(textChunk)}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
