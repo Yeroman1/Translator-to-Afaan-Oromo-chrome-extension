@@ -1,4 +1,5 @@
-# Afaan Oromo Web Translator
+# Afaan Oromo Web Translator Chrome Extension
+
 
 > **Level 3: Full Page & Selected Text Translator**
 
