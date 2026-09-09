@@ -17,6 +17,7 @@ const extractFullBtn = document.getElementById("extractFullBtn");
 const translateBtn = document.getElementById("translateBtn");
 const copyBtn = document.getElementById("copyBtn");
 const clearBtn = document.getElementById("clearBtn");
+const themeToggleBtn = document.getElementById("themeToggleBtn");
 
 const statusIndicator = document.getElementById("statusIndicator");
 const extractedTextArea = document.getElementById("extractedText");
@@ -370,7 +371,71 @@ function handleClearAll() {
 }
 
 // ============================================================================
-// 8. Event Listeners
+// 8. Theme Management (Light & Dark Theme)
+// ============================================================================
+const THEME_STORAGE_KEY = "afaan_oromo_translator_theme";
+
+function getSystemThemePreference() {
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
+function getStoredTheme() {
+  try {
+    return localStorage.getItem(THEME_STORAGE_KEY);
+  } catch (e) {
+    console.warn("Unable to read theme from localStorage:", e);
+    return null;
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch (e) {
+    console.warn("Unable to save theme to localStorage:", e);
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  if (themeToggleBtn) {
+    const isDark = theme === "dark";
+    const nextTheme = isDark ? "light" : "dark";
+    themeToggleBtn.setAttribute("title", `Switch to ${nextTheme} theme`);
+    themeToggleBtn.setAttribute("aria-label", `Switch to ${nextTheme} theme`);
+  }
+}
+
+function handleToggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  applyTheme(newTheme);
+  saveTheme(newTheme);
+}
+
+function initTheme() {
+  const storedTheme = getStoredTheme();
+  const initialTheme = storedTheme || getSystemThemePreference();
+  applyTheme(initialTheme);
+
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", handleToggleTheme);
+  }
+
+  // Follow system theme changes if user hasn't manually set an explicit preference
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!getStoredTheme()) {
+        applyTheme(e.matches ? "dark" : "light");
+      }
+    });
+  }
+}
+
+// ============================================================================
+// 9. Event Listeners & Initialization
 // ============================================================================
 extractSelectedBtn.addEventListener("click", handleExtractSelection);
 extractFullBtn.addEventListener("click", handleExtractFullContent);
@@ -379,3 +444,6 @@ copyBtn.addEventListener("click", handleCopyTranslation);
 clearBtn.addEventListener("click", handleClearAll);
 
 extractedTextArea.addEventListener("input", updateCounts);
+
+// Initialize Theme
+initTheme();

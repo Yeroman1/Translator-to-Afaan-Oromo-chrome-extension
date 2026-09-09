@@ -37,10 +37,76 @@
   --status-error-bg: #fef2f2;
   --status-error-text: #991b1b;
 
+  /* Theme Tokens */
+  --counter-bg: #e2e8f0;
+  --translated-bg: #f8fafc;
+  --translated-border: #cbd5e1;
+  --btn-secondary-hover-bg: #f1f5f9;
+  --btn-secondary-hover-border: #cbd5e1;
+  --btn-danger-hover-bg: #fef2f2;
+  --btn-danger-hover-text: #b91c1c;
+  --btn-danger-hover-border: #fecaca;
+  --toggle-btn-bg: #f1f5f9;
+  --toggle-btn-hover-bg: #e2e8f0;
+  --toggle-btn-border: #cbd5e1;
+  --scrollbar-track: #f8fafc;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
+  --logo-bg: #ffffff;
+
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+}
+
+[data-theme="dark"] {
+  --bg-main: #0b0f19;
+  --bg-card: #151d2f;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-glow: rgba(59, 130, 246, 0.35);
+
+  --translate-color: #10b981;
+  --translate-hover: #059669;
+  --translate-active: #047857;
+  --translate-glow: rgba(16, 185, 129, 0.35);
+
+  --border-subtle: #1e293b;
+  --border-focus: #60a5fa;
+
+  --status-ready-bg: #1e293b;
+  --status-ready-text: #94a3b8;
+
+  --status-loading-bg: rgba(59, 130, 246, 0.16);
+  --status-loading-text: #93c5fd;
+
+  --status-success-bg: rgba(16, 185, 129, 0.16);
+  --status-success-text: #6ee7b7;
+
+  --status-error-bg: rgba(239, 68, 68, 0.16);
+  --status-error-text: #fca5a5;
+
+  --counter-bg: #1e293b;
+  --translated-bg: #0f172a;
+  --translated-border: #1e293b;
+  --btn-secondary-hover-bg: #1e293b;
+  --btn-secondary-hover-border: #334155;
+  --btn-danger-hover-bg: rgba(239, 68, 68, 0.15);
+  --btn-danger-hover-text: #f87171;
+  --btn-danger-hover-border: rgba(239, 68, 68, 0.35);
+  --toggle-btn-bg: #1e293b;
+  --toggle-btn-hover-bg: #27354f;
+  --toggle-btn-border: #334155;
+  --scrollbar-track: #0b0f19;
+  --scrollbar-thumb: #2d3b55;
+  --scrollbar-thumb-hover: #475569;
+  --logo-bg: #151d2f;
 }
 
 * {
@@ -100,12 +166,14 @@ body {
   object-fit: contain;
   box-shadow: 0 4px 10px var(--primary-glow);
   flex-shrink: 0;
-  background-color: #ffffff;
+  background-color: var(--logo-bg);
 }
 
 .title-group {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .main-title {
@@ -113,12 +181,85 @@ body {
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .subtitle {
   font-size: 11px;
   font-weight: 500;
   color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Theme Toggle Button (Top Right) */
+.theme-toggle-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  padding: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--toggle-btn-bg);
+  border: 1px solid var(--toggle-btn-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--toggle-btn-hover-bg);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.theme-icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+}
+
+/* Light mode defaults: moon is visible, sun is rotated away */
+.sun-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+  color: #f59e0b;
+}
+
+.moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  color: var(--text-secondary);
+}
+
+/* Dark mode: sun is visible, moon is rotated away */
+[data-theme="dark"] .sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] .moon-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
 }
 
 /* Extraction Controls */
@@ -228,7 +369,7 @@ body {
   font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
-  background-color: #e2e8f0;
+  background-color: var(--counter-bg);
   padding: 1px 6px;
   border-radius: var(--radius-sm);
 }
@@ -255,8 +396,8 @@ body {
 }
 
 .translated-textarea {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
+  background-color: var(--translated-bg);
+  border-color: var(--translated-border);
 }
 
 /* Translate Action Section */
@@ -323,15 +464,15 @@ body {
 }
 
 .secondary-button:hover {
-  background-color: #f1f5f9;
+  background-color: var(--btn-secondary-hover-bg);
   color: var(--text-primary);
-  border-color: #cbd5e1;
+  border-color: var(--btn-secondary-hover-border);
 }
 
 .secondary-button.danger-hover:hover {
-  background-color: #fef2f2;
-  color: #b91c1c;
-  border-color: #fecaca;
+  background-color: var(--btn-danger-hover-bg);
+  color: var(--btn-danger-hover-text);
+  border-color: var(--btn-danger-hover-border);
 }
 
 /* Footer Credit */
@@ -360,4 +501,35 @@ body {
 .dot-separator {
   font-size: 8px;
   color: var(--text-muted);
+}
+
+/* Smooth Theme Transitions */
+body,
+.status-card,
+.content-textarea,
+.secondary-button,
+.header,
+.footer-actions,
+.counter-badge,
+.theme-toggle-btn {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
 }
