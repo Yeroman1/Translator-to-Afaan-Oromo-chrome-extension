@@ -11,7 +11,7 @@ A powerful Google Chrome Extension built using **Manifest V3** to extract and tr
 
 ---
 
-## 🎯 Level 3 Objectives & Workflows
+##  Level 3 Objectives & Workflows
 
 Level 3 allows users to translate text via **two powerful pathways**:
 
@@ -19,7 +19,7 @@ Level 3 allows users to translate text via **two powerful pathways**:
 1. Highlight any text on a webpage with your mouse.
 2. Click the extension icon and click **"✨ Extract Selected Text"**.
 3. Only your highlighted text is extracted into the source box.
-4. Click **"🌐 Translate to Afaan Oromo"**.
+4. Click **" Translate to Afaan Oromo"**.
 
 ### Pathway B: Right-Click Context Menu (In-Page Floating Card)
 1. Highlight any text on any normal webpage.
@@ -29,7 +29,7 @@ Level 3 allows users to translate text via **two powerful pathways**:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 Afaan Oromo translator/
@@ -43,7 +43,7 @@ Afaan Oromo translator/
 
 ---
 
-## 🎓 Concepts Taught in Level 3
+##  Concepts Taught in Level 3
 
 ### 1. `window.getSelection().toString()`
 The Web Selection API allows JavaScript to inspect the active text selection range made by the user's cursor. We inject this into the webpage to grab only highlighted sentences:
