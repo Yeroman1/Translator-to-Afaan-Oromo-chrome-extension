@@ -76,7 +76,7 @@ When the user triggers translation via the right-click menu, the background scri
 
 ---
 
-## 🔑 Permissions Declared
+##  Permissions Declared
 
 ```json
 {
@@ -98,7 +98,7 @@ When the user triggers translation via the right-click menu, the background scri
 
 ---
 
-## 🚀 How to Reload & Update in Chrome
+##  How to Reload & Update in Chrome
 
 1. Open Google Chrome and go to `chrome://extensions/`.
 2. Locate the **Afaan Oromo Web Translator** card.
@@ -119,7 +119,7 @@ When the user triggers translation via the right-click menu, the background scri
 
 ---
 
-## 🗺️ Project Roadmap
+##  Project Roadmap
 
 ```text
 Level 1  [DONE] Extract webpage text locally
